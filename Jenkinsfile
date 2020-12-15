@@ -7,6 +7,12 @@ pipeline {
       }
     }
 
+    stage('teri maaki chut') {
+      steps {
+        sh 'mvn compile'
+      }
+    }
+
   }
   environment {
     START = 'test'
