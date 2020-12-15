@@ -1,10 +1,9 @@
 pipeline {
   agent any
   stages {
-    stage('Compile') {
+    stage('SCM') {
       steps {
-        sh 'mvn compile'
-        echo 'hello'
+        git(url: 'https://github.com/Abhishek1121-tech/DMSAPP.git', branch: 'master', credentialsId: 'publicGitMine')
       }
     }
 
