@@ -7,7 +7,7 @@ pipeline {
       }
     }
 
-    stage('teri maaki chut') {
+    stage('Compile') {
       parallel {
         stage('teri maaki chut') {
           steps {
@@ -15,7 +15,7 @@ pipeline {
           }
         }
 
-        stage('maven') {
+        stage('verify') {
           steps {
             echo 'Hi keshav'
           }
