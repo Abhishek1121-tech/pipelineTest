@@ -9,7 +9,7 @@ pipeline {
 
     stage('Compile') {
       parallel {
-        stage('teri maaki chut') {
+        stage('Compile') {
           steps {
             sh 'mvn compile'
           }
