@@ -8,8 +8,19 @@ pipeline {
     }
 
     stage('teri maaki chut') {
-      steps {
-        sh 'mvn compile'
+      parallel {
+        stage('teri maaki chut') {
+          steps {
+            sh 'mvn compile'
+          }
+        }
+
+        stage('maven') {
+          steps {
+            echo 'Hi keshav'
+          }
+        }
+
       }
     }
 
