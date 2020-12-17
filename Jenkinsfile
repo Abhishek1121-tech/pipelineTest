@@ -8,19 +8,20 @@ pipeline {
     }
 
     stage('Compile') {
-      parallel {
-        stage('Compile') {
-          steps {
-            sh 'mvn compile'
-          }
-        }
+      steps {
+        sh 'mvn compile'
+      }
+    }
 
-        stage('verify') {
-          steps {
-            echo 'Hi keshav'
-          }
-        }
+    stage('Build') {
+      steps {
+        sh 'mvn package'
+      }
+    }
 
+    stage('Test') {
+      steps {
+        sh 'mvn test'
       }
     }
 
