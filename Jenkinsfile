@@ -25,6 +25,12 @@ pipeline {
       }
     }
 
+    stage('Anchore') {
+      steps {
+        anchore(bailOnFail: true, name: 'docker.io/library/debian:latest', engineRetries: '2', engineurl: 'http://192.168.200.134:8228/v1', engineverify: true, forceAnalyze: true, policyBundleId: 'anchore_cis_1.13.0_base', engineCredentialsId: 'anchoreCredID')
+      }
+    }
+
   }
   environment {
     START = 'test'
