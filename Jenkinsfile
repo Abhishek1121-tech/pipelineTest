@@ -54,12 +54,12 @@ RUN chown www-data:www-data -R /var/www/html && \\
 
 RUN service mysql start && \\
     sleep 3 && \\
-    mysql -uroot -pvulnerables -e "CREATE USER app@localhost IDENTIFIED BY \'vulnerables\';CREATE DATABASE dvwa;GRANT ALL privileges ON dvwa.* TO \'app\'@localhost;"
+    mysql -uroot -pvulnerables -e \\"CREATE USER app@localhost IDENTIFIED BY \'vulnerables\';CREATE DATABASE dvwa;GRANT ALL privileges ON dvwa.* TO \'app\'@localhost;\\"
 
 EXPOSE 80
 
 COPY main.sh /
-ENTRYPOINT ["/main.sh"]"  > ${WORKSPACE}/Dockerfile
+ENTRYPOINT ["/main.sh"]" > ${WORKSPACE}/Dockerfile
 
 echo "docker.io/vulnerables/web-dvwa:latest" ${WORKSPACE}/Dockerfile > anchore_images;'''
       }
