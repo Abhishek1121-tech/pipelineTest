@@ -52,7 +52,7 @@ echo "docker.io/library/debian:latest" ${WORKSPACE}/Dockerfile > anchore_images;
 
     stage('Anchore') {
       steps {
-        anchore(bailOnFail: true, name: 'anchore_images', engineRetries: '25', engineurl: 'http://192.168.200.134:8228/v1', engineverify: true, forceAnalyze: true, engineCredentialsId: 'anchoreCredID')
+        anchore(bailOnFail: true, name: 'anchore_images', engineRetries: '300', engineurl: 'http://192.168.200.134:8228/v1', engineverify: true, forceAnalyze: true, engineCredentialsId: 'anchoreCredID')
       }
     }
 
