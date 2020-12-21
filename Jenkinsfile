@@ -22,31 +22,46 @@ pipeline {
     stage('Test') {
       steps {
         sh '''mvn test;
-echo "# FYI, this base image is built via test-pr.sh (from https://github.com/docker-library/bashbrew/tree/master/Dockerfile)
-FROM oisupport/bashbrew:base
+echo "FROM debian:9.2
 
-RUN set -eux; \\
-	apt-get update; \\
-	apt-get install -y --no-install-recommends \\
-# wget for downloading files (especially in tests, which run in this environment)
-		ca-certificates \\
-		wget \\
-# git for cloning source code
-		git \\
-# gawk for diff-pr.sh
-		gawk \\
-# tar -tf in diff-pr.sh
-		bzip2 \\
-	; \\
-	rm -rf /var/lib/apt/lists/*
+LABEL maintainer "opsxcq@strm.sh"
 
-ENV DIR /usr/src/official-images
-ENV BASHBREW_LIBRARY $DIR/library
+RUN apt-get update && \\
+    apt-get upgrade -y && \\
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \\
+    debconf-utils && \\
+    echo mariadb-server mysql-server/root_password password vulnerables | debconf-set-selections && \\
+    echo mariadb-server mysql-server/root_password_again password vulnerables | debconf-set-selections && \\
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \\
+    apache2 \\
+    mariadb-server \\
+    php \\
+    php-mysql \\
+    php-pgsql \\
+    php-pear \\
+    php-gd \\
+    && \\
+    apt-get clean && \\
+    rm -rf /var/lib/apt/lists/*
 
-WORKDIR $DIR
-COPY . $DIR" > ${WORKSPACE}/Dockerfile
+COPY php.ini /etc/php5/apache2/php.ini
+COPY dvwa /var/www/html
 
-echo "docker.io/library/debian:latest" ${WORKSPACE}/Dockerfile > anchore_images;'''
+COPY config.inc.php /var/www/html/config/
+
+RUN chown www-data:www-data -R /var/www/html && \\
+    rm /var/www/html/index.html
+
+RUN service mysql start && \\
+    sleep 3 && \\
+    mysql -uroot -pvulnerables -e "CREATE USER app@localhost IDENTIFIED BY \'vulnerables\';CREATE DATABASE dvwa;GRANT ALL privileges ON dvwa.* TO \'app\'@localhost;"
+
+EXPOSE 80
+
+COPY main.sh /
+ENTRYPOINT ["/main.sh"]"  > ${WORKSPACE}/Dockerfile
+
+echo "docker.io/vulnerables/web-dvwa:latest" ${WORKSPACE}/Dockerfile > anchore_images;'''
       }
     }
 
