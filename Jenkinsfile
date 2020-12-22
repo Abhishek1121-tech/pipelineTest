@@ -4,7 +4,8 @@ pipeline {
     stage('SCM') {
       steps {
         git(url: 'https://github.com/Abhishek1121-tech/DMSAPP.git', branch: 'master', credentialsId: 'publicGitMine', changelog: true, poll: true)
-        sh '''cd ${WORKSPACE}/src
+        sh '''echo "test"
+cd ${WORKSPACE}/src
 pwd'''
       }
     }
